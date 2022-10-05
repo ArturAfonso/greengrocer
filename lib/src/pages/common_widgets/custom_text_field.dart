@@ -8,16 +8,20 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? initialValue;
   final bool readOnly;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
-  const CustomTextField({
-    Key? key,
-    required this.icon,
-    required this.label,
-    this.isSecret = false,
-    this.inputFormatters,
-    this.initialValue,
-    this.readOnly = false,
-  }) : super(key: key);
+  const CustomTextField(
+      {Key? key,
+      required this.icon,
+      required this.label,
+      this.isSecret = false,
+      this.inputFormatters,
+      this.initialValue,
+      this.readOnly = false,
+      this.validator,
+      this.controller})
+      : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -38,6 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
+        controller: widget.controller,
         readOnly: widget.readOnly,
         initialValue: widget.initialValue,
         inputFormatters: widget.inputFormatters,
@@ -51,8 +56,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       isObscure = !isObscure;
                     });
                   },
-                  icon:
-                      Icon(isObscure ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(isObscure ? Icons.visibility : Icons.visibility_off),
                 )
               : null,
           labelText: widget.label,
@@ -61,6 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderRadius: BorderRadius.circular(18),
           ),
         ),
+        validator: widget.validator,
       ),
     );
   }
